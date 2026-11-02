@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // GANTI daftar email ini dengan email Google anggota tim.
+    function member() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in [
+          'emailkamu@gmail.com',
+          'teman@gmail.com'
+        ];
+    }
+
+    // Profil: semua anggota boleh membaca (untuk daftar penanggung jawab), hanya pemilik yang menulis.
+    // Tugas pribadi dan penanda "sudah dilihat" di bawahnya hanya bisa dibuka pemiliknya.
+    match /users/{uid} {
+      allow read: if member();
+      allow write: if member() && request.auth.uid == uid;
+      match /tasks/{id}   { allow read, write: if member() && request.auth.uid == uid; }
+      match /private/{id} { allow read, write: if member() && request.auth.uid == uid; }
+    }
+
+    // Tugas tim, referensi, dan ide: semua anggota membaca dan mengubah,
+    // tetapi hanya pembuatnya yang boleh menghapus.
+    match /{coll}/{id} {
+      allow read: if member() && coll in ['tasks', 'refs', 'ideas'];
+      allow create: if member() && coll in ['tasks', 'refs', 'ideas']
+        && request.resource.data.by == request.auth.uid;
+      allow update: if member() && coll in ['tasks', 'refs', 'ideas']
+        && request.resource.data.by == resource.data.by;
+      allow delete: if member() && coll in ['tasks', 'refs', 'ideas']
+        && resource.data.by == request.auth.uid;
+    }
+  }
+}

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Papan Kerja Desain</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f3f1ee;--surface:#fff;--ink:#1d1b2e;--muted:#6b6880;--line:#dcd8d2;--accent:#3b2fd9;--accent-ink:#fff;
+--todo:#e8e4ff;--doing:#ffe9c2;--done:#d4f0dc;--n0:#fff3a8;--n1:#ffd0dc;--n2:#cfe8ff;--n3:#d6f5c9;--nink:#2a2830}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17161d;--surface:#22212b;--ink:#efedf7;--muted:#a09db3;--line:#3a3847;--accent:#8f86ff;--accent-ink:#13121a;--todo:#2f2c52;--doing:#4a3b1c;--done:#1f3d2a}}
+:root[data-theme="dark"]{--bg:#17161d;--surface:#22212b;--ink:#efedf7;--muted:#a09db3;--line:#3a3847;--accent:#8f86ff;--accent-ink:#13121a;--todo:#2f2c52;--doing:#4a3b1c;--done:#1f3d2a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Avenir Next","Segoe UI",system-ui,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:20px 16px 48px}
+h1{font:800 clamp(1.7rem,5vw,2.6rem)/1.05 "Trebuchet MS","Avenir Next",sans-serif;letter-spacing:-.02em;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 16px}
+nav{display:flex;gap:6px;border-bottom:2px solid var(--line);margin-bottom:18px;overflow-x:auto}
+nav button{background:none;border:0;color:var(--muted);font:600 1rem "Avenir Next","Segoe UI",sans-serif;padding:10px 16px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap}
+nav button[aria-selected="true"]{color:var(--accent);border-color:var(--accent)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+form.add,.seg{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:8px;padding:9px 11px;min-width:0}
+form.add input[type=text],form.add textarea{flex:1 1 180px}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:8px;padding:9px 16px;font:700 1rem inherit;cursor:pointer}
+.btn.g,.seg button{background:none;color:var(--muted);border:1.5px solid var(--line);font-weight:600;padding:4px 10px;font-size:.85rem;border-radius:8px;cursor:pointer;font-family:inherit}
+.seg button{border-radius:99px;font-size:.9rem;padding:4px 14px;background:var(--surface);color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.col{border-radius:12px;padding:12px;min-height:120px}.col h2{font-size:1rem;margin:0 0 10px;display:flex;justify-content:space-between}
+.col[data-s=todo]{background:var(--todo)}.col[data-s=doing]{background:var(--doing)}.col[data-s=done]{background:var(--done)}
+.card{background:var(--surface);border-radius:8px;padding:10px 12px;margin-bottom:8px;border:1px solid var(--line)}
+.card p{margin:0 0 6px;font-weight:600;overflow-wrap:anywhere}
+.meta{font-size:.82rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:1px 9px;font-size:.78rem}
+.late{color:#c0392b;font-weight:700}.acts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;align-items:center}
+.acts select{padding:3px 6px;font-size:.82rem}.dn{text-decoration:line-through;opacity:.6}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.ref{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.ref img{width:100%;display:block;aspect-ratio:4/3;object-fit:cover}.ref .b{padding:10px 12px}
+.ref a{color:var(--accent);overflow-wrap:anywhere;font-size:.85rem}
+.topic{margin-bottom:22px}.topic h2{font-size:1.05rem;margin:0 0 10px}.notes{display:flex;flex-wrap:wrap;gap:14px}
+.note{width:200px;min-height:130px;padding:14px;border-radius:4px 4px 14px 4px;color:var(--nink);box-shadow:2px 4px 0 rgba(0,0,0,.15);display:flex;flex-direction:column;justify-content:space-between}
+.note p{margin:0 0 8px;overflow-wrap:anywhere}.note small{opacity:.7}.note .btn.g{color:var(--nink);border-color:rgba(0,0,0,.3);background:none}
+.empty,.warn{color:var(--muted);padding:20px;border:2px dashed var(--line);border-radius:12px;text-align:center}
+.warn{margin-bottom:16px;border-color:#c0392b;color:var(--ink)}
+.prof{display:flex;gap:16px;align-items:center;margin-bottom:20px}
+.av{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font:800 1.7rem sans-serif;color:#fff;flex:none}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px}.stat b{font-size:1.6rem;display:block}
+#ban{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--accent);color:var(--accent-ink);border-radius:10px;padding:10px 14px;margin-bottom:14px}
+#ban .btn.g{color:var(--accent-ink);border-color:currentColor}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));max-width:min(92vw,420px);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:10px;z-index:20;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.chip.nw{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700}
+.wrap.lo>:not(.lg):not(h1):not(.sub){display:none}.wrap:not(.lo)>.lg{display:none}
+.lg{padding:28px;border:2px dashed var(--line);border-radius:12px;text-align:center}
+[hidden],.hide{display:none!important}
+@media(max-width:760px){.cols{grid-template-columns:1fr}.note{width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap lo">
+<h1>Papan Kerja Desain</h1>
+<p class="sub">Tugas pribadi, tugas tim, referensi, dan ide dalam satu tempat.</p>
+<div class="lg" id="login"><p id="lmsg">Masuk untuk membuka papan kerja tim.</p><button class="btn" id="gbtn">Masuk dengan Google</button></div>
+<button class="btn g" id="out" style="margin-bottom:14px">Keluar</button>
+<div class="warn" id="warn" hidden>Halaman ini perlu masuk dengan akun Claude dan undangan dari pemilik untuk menyimpan data. Buka lewat tautan yang dibagikan, lalu muat ulang.</div>
+<div id="ban" hidden></div>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+<nav role="tablist">
+<button role="tab" data-tab="tugas">Tugas</button><button role="tab" data-tab="ref">Referensi</button>
+<button role="tab" data-tab="ide">Brainstorm</button><button role="tab" data-tab="profil">Profil</button>
+</nav>
+
+<section id="tugas">
+<div class="seg" id="scope"><button data-scope="mine">Pribadi</button><button data-scope="tim">Tim</button></div>
+<div class="seg" id="filt"><button data-f="semua">Semua tugas</button><button data-f="aku">Ditugaskan ke saya</button></div>
+<form class="add" id="f-tugas">
+<input type="text" id="t-judul" placeholder="Tugas baru" required>
+<input type="text" id="t-label" placeholder="Proyek / klien" style="flex:0 1 140px">
+<input type="date" id="t-tgl" aria-label="Deadline">
+<select id="t-asg" aria-label="Ditugaskan ke"></select>
+<button class="btn">Tambah</button>
+</form>
+<div class="cols" id="cols"></div>
+</section>
+
+<section id="ref" class="hide">
+<form class="add" id="f-ref">
+<input type="text" id="r-judul" placeholder="Judul referensi" required>
+<input type="text" id="r-url" placeholder="Link (opsional)">
+<input type="text" id="r-tag" placeholder="Tag, pisahkan koma" style="flex:0 1 180px">
+<input type="file" id="r-img" accept="image/*" aria-label="Gambar">
+<button class="btn">Simpan</button>
+</form>
+<div class="seg" id="tags"></div><div class="grid" id="grid"></div>
+</section>
+
+<section id="ide" class="hide">
+<form class="add" id="f-ide">
+<textarea id="i-teks" rows="2" placeholder="Tulis idemu" required></textarea>
+<input type="text" id="i-topik" placeholder="Topik" style="flex:0 1 180px"><button class="btn">Tempel ide</button>
+</form>
+<div id="topics"></div>
+</section>
+
+<section id="profil" class="hide"></section>
+</div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,collection,doc,addDoc,setDoc,updateDoc,deleteDoc,getDoc,getDocs,onSnapshot} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {firebaseConfig} from "./firebase-config.js";
+const app=initializeApp(firebaseConfig),auth=getAuth(app),fs=getFirestore(app);
+
+// ===== Jembatan Firebase: membuat Firestore terlihat seperti db dan user yang dipakai kode di bawah =====
+// Tugas pribadi disimpan di users/<id>/tasks, dan penanda "sudah dilihat" di users/<id>/private/meta
+const P=p=>p.replace(/^data\/users\/([^/]+)\/_meta$/,'users/$1/private/meta').replace(/^data\/users\/([^/]+)/,'users/$1/tasks');
+const D=p=>{const r=doc(fs,...P(p).split('/'));return{update:d=>updateDoc(r,d),delete:()=>deleteDoc(r),set:d=>setDoc(r,d),
+  get:async()=>{const s=await getDoc(r);return{exists:s.exists(),data:()=>s.data()}}}};
+const fdb={collection:p=>{const c=()=>collection(fs,...P(p).split('/'));
+  return{add:d=>addDoc(c(),d),doc:id=>D(p+'/'+id),onSnapshot:(n,e)=>onSnapshot(c(),n,e)}},doc:p=>D(p)};
+const colorFor=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))%360;return `hsl(${h} 55% 40%)`};
+const allUsers=async()=>(await getDocs(collection(fs,'users'))).docs.map(d=>({id:d.id,...d.data()}));
+const fuser={
+  me:async()=>({name:auth.currentUser.displayName||'Saya',color:colorFor(auth.currentUser.uid),isOwner:false,canEdit:false}),
+  id:async()=>auth.currentUser.uid,
+  search:async()=>allUsers(),
+  profiles:async ids=>{const w=[].concat(ids);return Object.fromEntries((await allUsers()).filter(u=>w.includes(u.id)).map(u=>[u.id,u]))}
+};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const S={team:[],mine:[],refs:[],ideas:[],names:{},members:[],tab:'tugas',scope:'tim',f:'semua',tag:'',me:null,seen:0,known:null};
+let db,user,uid;
+const today=new Date().toISOString().slice(0,10);
+const nm=id=>!id?'':id===uid?'Saya':(S.names[id]?.name||'Seseorang');
+const col=()=>S.scope==='tim'?db.collection('tasks'):db.collection('data/users/'+uid);
+const can=x=>x.by===uid||(S.me&&S.me.canEdit);
+
+// 1. Mulai: sambungkan database dan akun, lalu pantau perubahan secara langsung
+async function init(){
+  render();
+  db=fdb;user=fuser;
+  
+  S.me=await user.me();uid=await user.id();
+  if(!uid){$('warn').hidden=false;return;}
+  try{const mp='data/users/'+uid+'/_meta',m=await db.doc(mp).get();
+    if(m.exists)S.seen=m.data().seen||0;else{S.seen=Date.now();await db.doc(mp).set({seen:S.seen})}}catch(e){S.seen=Date.now()}
+  try{const r=await user.search('');const p=Object.values(await user.profiles([uid]));
+    S.members=[...p,...r.filter(x=>x.id!==uid)];}catch(e){S.members=[]}
+  watch(db.collection('tasks'),'team');watch(db.collection('data/users/'+uid),'mine');
+  watch(db.collection('refs'),'refs');watch(db.collection('ideas'),'ideas');
+}
+function watch(q,key){
+  q.onSnapshot(async s=>{
+    S[key]=s.docs.filter(d=>d.id!=='_meta').map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.created||0)-(a.created||0));
+    const ids=new Set(S.members.map(m=>m.id));
+    ['team','refs','ideas'].forEach(k=>S[k].forEach(x=>{if(x.by)ids.add(x.by);if(x.assignee)ids.add(x.assignee)}));
+    try{Object.assign(S.names,await user.profiles([...ids]))}catch(e){}
+    if(key==='team'){const cur={};S.team.forEach(t=>cur[t.id]=t.assignee||'');
+      if(S.known)S.team.forEach(t=>{if(t.assignee===uid&&S.known[t.id]!==uid&&t.assignedBy&&t.assignedBy!==uid&&t.s!=='done')toast(nm(t.assignedBy)+' menugaskan: '+t.judul)});
+      S.known=cur}
+    render();
+  },e=>console.error(e));
+}
+
+// Notifikasi: tugas yang ditugaskan orang lain sejak terakhir kamu tandai dilihat
+const newTasks=()=>S.team.filter(t=>t.assignee===uid&&t.assignedBy&&t.assignedBy!==uid&&t.s!=='done'&&(t.assignedAt||t.created||0)>S.seen);
+function badge(){
+  const n=newTasks().length,b=$('ban');
+  document.title=(n?'('+n+') ':'')+'Papan Kerja Desain';
+  document.querySelector('[data-tab=tugas]').textContent=n?'Tugas ('+n+')':'Tugas';
+  b.hidden=!n;
+  if(n)b.innerHTML=`<strong>${n} tugas baru untuk kamu.</strong> <button class="btn g" data-n="lihat">Lihat</button> <button class="btn g" data-n="ok">Tandai sudah dilihat</button>`;
+}
+let tt;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>{t.hidden=true},6000)}
+$('ban').onclick=async e=>{const k=e.target.dataset.n;if(!k)return;
+  if(k==='lihat'){S.tab='tugas';S.scope='tim';S.f='aku';render()}
+  if(k==='ok'&&db){S.seen=Date.now();try{await db.doc('data/users/'+uid+'/_meta').set({seen:S.seen})}catch(x){}render()}};
+
+// 2. Tampilan
+function render(){
+  badge();
+  document.querySelectorAll('nav button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===S.tab));
+  ['tugas','ref','ide','profil'].forEach(t=>$(t).classList.toggle('hide',t!==S.tab));
+  if(S.tab==='tugas')renderTasks();if(S.tab==='ref')renderRefs();if(S.tab==='ide')renderIdeas();if(S.tab==='profil')renderProfile();
+}
+document.querySelector('nav').onclick=e=>{if(e.target.dataset.tab){S.tab=e.target.dataset.tab;render()}};
+const opts=sel=>'<option value="">Belum ditugaskan</option>'+S.members.map(p=>`<option value="${p.id}"${p.id===sel?' selected':''}>${esc(p.id===uid?'Saya':p.name||'Anggota')}</option>`).join('');
+
+// 3. Tugas pribadi dan tugas tim
+const ST=[['todo','Akan dikerjakan'],['doing','Lagi dikerjakan'],['done','Selesai']];
+function renderTasks(){
+  const team=S.scope==='tim';
+  document.querySelectorAll('#scope button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.scope===S.scope));
+  document.querySelectorAll('#filt button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===S.f));
+  $('filt').classList.toggle('hide',!team);$('t-asg').classList.toggle('hide',!team);
+  if(team&&document.activeElement!==$('t-asg'))$('t-asg').innerHTML=opts('');
+  let list=team?S.team:S.mine;if(team&&S.f==='aku')list=list.filter(t=>t.assignee===uid);
+  $('cols').innerHTML=ST.map(([k,name],i)=>{
+    const it=list.filter(t=>t.s===k);
+    return `<div class="col" data-s="${k}"><h2>${name}<span>${it.length}</span></h2>${it.map(t=>`
+    <div class="card"><p class="${k==='done'?'dn':''}">${esc(t.judul)}</p>
+    <div class="meta">${t.label?`<span class="chip">${esc(t.label)}</span>`:''}
+    ${t.tgl?`<span class="${t.tgl<today&&k!=='done'?'late':''}">Deadline ${esc(t.tgl)}</span>`:''}
+    ${team?`<span>Dibuat ${esc(nm(t.by))}</span>`:''}${newTasks().includes(t)?'<span class="chip nw">Baru</span>':''}</div>
+    <div class="acts">
+    ${team?`<select data-a="asg" data-id="${t.id}" aria-label="Ditugaskan ke">${opts(t.assignee)}</select>`:''}
+    ${i>0?`<button class="btn g" data-a="mv" data-d="-1" data-id="${t.id}">Mundur</button>`:''}
+    ${i<2?`<button class="btn g" data-a="mv" data-d="1" data-id="${t.id}">Maju</button>`:''}
+    ${!team||can(t)?`<button class="btn g" data-a="del" data-id="${t.id}">Hapus</button>`:''}</div></div>`).join('')||'<div class="meta">Kosong</div>'}</div>`;
+  }).join('');
+}
+$('scope').onclick=e=>{if(e.target.dataset.scope){S.scope=e.target.dataset.scope;render()}};
+$('filt').onclick=e=>{if(e.target.dataset.f){S.f=e.target.dataset.f;render()}};
+$('f-tugas').onsubmit=async e=>{
+  e.preventDefault();if(!db)return;
+  const d={judul:$('t-judul').value.trim(),label:$('t-label').value.trim(),tgl:$('t-tgl').value,s:'todo',by:uid,created:Date.now()};
+  if(S.scope==='tim'){d.assignee=$('t-asg').value;d.assignedBy=uid;d.assignedAt=Date.now()}
+  try{await col().add(d);e.target.reset()}catch(x){alert('Gagal menyimpan: '+(x.message||x.code))}
+};
+async function taskAct(e){
+  const b=e.target.closest('[data-a]');if(!b||!db)return;
+  const t=(S.scope==='tim'?S.team:S.mine).find(x=>x.id===b.dataset.id);if(!t)return;
+  const r=col().doc(t.id);
+  try{
+    if(b.dataset.a==='del')await r.delete();
+    if(b.dataset.a==='mv'){const o=['todo','doing','done'];await r.update({s:o[o.indexOf(t.s)+Number(b.dataset.d)]})}
+    if(b.dataset.a==='asg'&&e.type==='change')await r.update({assignee:b.value,assignedBy:uid,assignedAt:Date.now()});
+  }catch(x){alert('Gagal: '+(x.message||x.code))}
+}
+$('cols').onclick=e=>{if(e.target.tagName==='BUTTON')taskAct(e)};
+$('cols').onchange=e=>{if(e.target.tagName==='SELECT')taskAct(e)};
+
+// 4. Referensi bersama (gambar diperkecil dulu)
+function shrink(f){return new Promise(r=>{const i=new Image();i.onload=()=>{const w=Math.min(400,i.width),c=document.createElement('canvas');
+  c.width=w;c.height=i.height*w/i.width;c.getContext('2d').drawImage(i,0,0,c.width,c.height);r(c.toDataURL('image/jpeg',.6))};i.onerror=()=>r('');i.src=URL.createObjectURL(f)})}
+function renderRefs(){
+  const tags=[...new Set(S.refs.flatMap(r=>r.tags||[]))];
+  $('tags').innerHTML=tags.length?['',...tags].map(t=>`<button data-tag="${esc(t)}" aria-pressed="${S.tag===t}">${t?esc(t):'Semua'}</button>`).join(''):'';
+  const l=S.refs.filter(r=>!S.tag||(r.tags||[]).includes(S.tag));
+  $('grid').innerHTML=l.length?l.map(r=>`<div class="ref">${r.img?`<img src="${r.img}" alt="${esc(r.judul)}">`:''}<div class="b">
+  <strong>${esc(r.judul)}</strong>${r.url?`<div><a href="${esc(r.url)}" target="_blank" rel="noopener noreferrer">${esc(r.url)}</a></div>`:''}
+  <div class="meta" style="margin-top:6px">${(r.tags||[]).map(t=>`<span class="chip">${esc(t)}</span>`).join('')}<span>oleh ${esc(nm(r.by))}</span></div>
+  ${can(r)?`<div class="acts"><button class="btn g" data-id="${r.id}">Hapus</button></div>`:''}</div></div>`).join(''):'<div class="empty">Belum ada referensi. Unggah gambar atau tempel link di atas.</div>';
+}
+$('f-ref').onsubmit=async e=>{
+  e.preventDefault();if(!db)return;const f=$('r-img').files[0];let url=$('r-url').value.trim();
+  if(url&&!/^https?:\/\//i.test(url))url='https://'+url;
+  try{await db.collection('refs').add({judul:$('r-judul').value.trim(),url,img:f?await shrink(f):'',
+    tags:$('r-tag').value.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean),by:uid,created:Date.now()});e.target.reset()}
+  catch(x){alert('Gagal menyimpan: '+(x.message||x.code))}
+};
+$('tags').onclick=e=>{if(e.target.dataset.tag!==undefined){S.tag=e.target.dataset.tag;render()}};
+$('grid').onclick=async e=>{const b=e.target.closest('button');if(b&&db)try{await db.collection('refs').doc(b.dataset.id).delete()}catch(x){}};
+
+// 5. Brainstorm: satu orang satu suara
+function renderIdeas(){
+  const g={};S.ideas.forEach(i=>(g[i.topik||'Tanpa topik']||=[]).push(i));
+  $('topics').innerHTML=Object.keys(g).length?Object.entries(g).map(([n,l])=>`<div class="topic"><h2>${esc(n)}</h2><div class="notes">
+  ${l.sort((a,b)=>(b.votes||[]).length-(a.votes||[]).length).map(i=>`<div class="note" style="background:var(--n${(i.warna||0)%4})"><p>${esc(i.teks)}</p>
+  <div><small>${esc(nm(i.by))}</small><div class="acts"><button class="btn g" data-a="v" data-id="${i.id}">${(i.votes||[]).includes(uid)?'Batal suka':'Suka'} ${(i.votes||[]).length}</button>
+  ${can(i)?`<button class="btn g" data-a="x" data-id="${i.id}">Hapus</button>`:''}</div></div></div>`).join('')}</div></div>`).join(''):'<div class="empty">Belum ada ide. Tulis satu di atas.</div>';
+}
+$('f-ide').onsubmit=async e=>{
+  e.preventDefault();if(!db)return;
+  try{await db.collection('ideas').add({teks:$('i-teks').value.trim(),topik:$('i-topik').value.trim(),votes:[],warna:Math.floor(Math.random()*4),by:uid,created:Date.now()});e.target.reset()}
+  catch(x){alert('Gagal menyimpan: '+(x.message||x.code))}
+};
+$('topics').onclick=async e=>{
+  const b=e.target.closest('button');if(!b||!db)return;const i=S.ideas.find(x=>x.id===b.dataset.id),r=db.collection('ideas').doc(i.id);
+  try{if(b.dataset.a==='x')await r.delete();else{const v=i.votes||[];await r.update({votes:v.includes(uid)?v.filter(x=>x!==uid):[...v,uid]})}}catch(x){}
+};
+
+// 6. Profil
+function renderProfile(){
+  if(!S.me){$('profil').innerHTML='<div class="empty">Masuk dulu untuk melihat profil.</div>';return}
+  const mine=S.team.filter(t=>t.assignee===uid),open=mine.filter(t=>t.s!=='done');
+  const n=S.me.name||'Saya';
+  $('profil').innerHTML=`<div class="prof"><div class="av" style="background:${esc(S.me.color||'#3b2fd9')}">${esc(n[0]||'S').toUpperCase()}</div>
+  <div><h2 style="margin:0">${esc(n)}</h2><div class="meta">${S.me.isOwner?'Pemilik':S.me.canEdit?'Editor':'Anggota tim'}</div></div></div>
+  <div class="stats"><div class="stat"><b>${open.length}</b>Tugas tim untuk saya</div><div class="stat"><b>${S.mine.filter(t=>t.s!=='done').length}</b>Tugas pribadi aktif</div>
+  <div class="stat"><b>${S.refs.filter(r=>r.by===uid).length}</b>Referensi saya</div><div class="stat"><b>${S.ideas.filter(i=>i.by===uid).length}</b>Ide saya</div></div>
+  <h2 style="font-size:1.05rem">Ditugaskan ke saya</h2>${open.length?open.map(t=>`<div class="card"><p>${esc(t.judul)}</p><div class="meta">${t.label?`<span class="chip">${esc(t.label)}</span>`:''}
+  ${t.tgl?`<span class="${t.tgl<today?'late':''}">Deadline ${esc(t.tgl)}</span>`:''}<span>dari ${esc(nm(t.by))}</span></div></div>`).join(''):'<div class="empty">Tidak ada tugas yang menunggu.</div>'}`;
+}
+// ===== Login Google =====
+let started=false;const wrap=document.querySelector('.wrap');
+$('gbtn').onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(e=>{$('lmsg').textContent='Gagal masuk: '+(e.code||e.message)});
+$('out').onclick=()=>signOut(auth).then(()=>location.reload());
+onAuthStateChanged(auth,async u=>{
+  wrap.classList.toggle('lo',!u);
+  if(!u||started)return;
+  try{await setDoc(doc(fs,'users',u.uid),{name:u.displayName||u.email,color:colorFor(u.uid)},{merge:true})}
+  catch(e){wrap.classList.add('lo');$('lmsg').textContent='Akun '+u.email+' belum terdaftar sebagai anggota tim.';await signOut(auth);return}
+  started=true;init();
+});
+</script>
+</body>
+</html>
